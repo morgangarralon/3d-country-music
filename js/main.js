@@ -1,35 +1,6 @@
 var canvas;
-var loader = new THREE.ImageLoader();
-
-// load a image resource
-loader.load(
-    // resource URL
-    "img/earth_color.jpg",
-
-    // onLoad callback
-    function ( image ) {
-        // use the image, e.g. draw part of it on a canvas
-        canvas = document.createElement( 'canvas' );
-        context = canvas.getContext( '2d' );
-    },
-
-    // onProgress callback currently not supported
-    undefined,
-
-    // onError callback
-    function () {
-        console.error( 'An error happened.' );
-    }
-);
-
-function getPixelColor(imagedata, x, y ) {
-    var position = ( x * imagedata.height * y ) * 4
-    var data = imagedata.data
-
-    console.log(imagedata)
-
-    return { r: data[ position ], g: data[ position + 1 ], b: data[ position + 2 ] }
-}
+var textureLoaderEarthInBloom = new THREE.TextureLoader();
+var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_color.jpg');
 
 var speedEarth = .001;
 var speedMoon = speedEarth/27;
@@ -76,28 +47,28 @@ scene.add(groupEarth);
 scene.add(selectionables);
 
 scene.background = new THREE.CubeTextureLoader()
-.setPath( 'img/' )
-.load( [
-    'cosmos_1.jpg',
-    'cosmos_2.jpg',
-    'cosmos_3.jpg',
-    'cosmos_4.jpg',
-    'cosmos_5.jpg',
-    'cosmos_6.jpg'
-] );
-textureLoaderEarth.load("img/earth_color.jpg ", function(texture) {
+    .setPath( 'img/' )
+    .load([
+        'cosmos_1.jpg',
+        'cosmos_2.jpg',
+        'cosmos_3.jpg',
+        'cosmos_4.jpg',
+        'cosmos_5.jpg',
+        'cosmos_6.jpg'
+]);
+textureLoaderEarth.load('img/earth_color.jpg', function(texture) {
     earth.material.map = texture;
     earth.material.needsUpdate = true;
 })
-textureLoaderEarth.load("img/earth_normal.jpg ", function(texture) {
+textureLoaderEarth.load('img/earth_normal.jpg', function(texture) {
     earth.material.normalMap = texture;
     earth.material.needsUpdate = true;
 })
-textureLoaderCloud.load("img/earth_cloud.jpg ", function(texture) {
+textureLoaderCloud.load('img/earth_cloud.jpg', function(texture) {
     cloud.material.alphaMap = texture;
     cloud.material.needsUpdate = true;
 })
-textureLoaderMoon.load("img/moon_color.jpg ", function(texture) {
+textureLoaderMoon.load('img/moon_color.jpg', function(texture) {
     moon.material.map = texture;
     moon.material.needsUpdate = true;
 })
@@ -123,20 +94,15 @@ function getSelectionneLePlusProche(position) {
 function onMouseClick(event) {
     var position = new THREE.Vector2();
     var domRect = renderer.domElement.getBoundingClientRect();
-    position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
-    position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
-
-    var object = getSelectionneLePlusProche(position);
+    // position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
+    // position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
+    var object = getSelectionneLePlusProche(position)
     if(object) {
-        console.log(loader)
-        /* console.log(object);
-        color = getPixelColor(imageData, 10, 10);
-        console.log(color); */
-        var pixelData = canvas.getContext('2d').getImageData(position.x, position.y, 1, 1).data; 
-        console.log(pixelData)
+        objectPosition = getPositionOnObject(camera, object)
+        console.log(objectPosition)
         /* alert("Vous avez sélectionné l'objet " + object.name); */
     } else {
-        alert("Vous n'avez rien sélectionné");
+        alert("Vous n'avez rien sélectionné")
     };
 }
 
