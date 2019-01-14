@@ -1,4 +1,3 @@
-var canvas;
 var textureLoaderEarthInBloom = new THREE.TextureLoader();
 var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_color.jpg');
 
@@ -8,8 +7,6 @@ var speedCloud = speedEarth/0.7;
 var scene = new THREE.Scene();
 var groupMoon = new THREE.Group();
 var groupEarth = new THREE.Group();
-var moonPanel = new THREE.Object3D();
-var raycaster = new THREE.Raycaster();
 var selectionables = new THREE.Group();
 var renderer = new THREE.WebGLRenderer();
 var textureLoaderMoon = new THREE.TextureLoader();
@@ -38,9 +35,6 @@ controls.minDistance = 2;
 groupEarth.add(earth);
 groupEarth.add(cloud);
 selectionables.add(earth);
-moonPanel.position.x = .75;
-moonPanel.position.y = .75;
-moon.add(moonPanel)
 groupMoon.add(moon);
 
 scene.add(groupEarth);
@@ -80,31 +74,6 @@ scene.add(pointLight);
 camera.position.z = 8;
 
 moon.lookAt(earth.position);
-
-var raycaster = new THREE.Raycaster();
-
-function getSelectionneLePlusProche(position) {
-    raycaster.setFromCamera(position, camera);
-    var selectionnes = raycaster.intersectObjects(selectionables.children);
-    if (selectionnes.length) {
-        return selectionnes[0];
-    }
-}
-
-function onMouseClick(event) {
-    var position = new THREE.Vector2();
-    var domRect = renderer.domElement.getBoundingClientRect();
-    // position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
-    // position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
-    var object = getSelectionneLePlusProche(position)
-    if(object) {
-        objectPosition = getPositionOnObject(camera, object)
-        console.log(objectPosition)
-        /* alert("Vous avez sélectionné l'objet " + object.name); */
-    } else {
-        alert("Vous n'avez rien sélectionné")
-    };
-}
 
 renderer.domElement.addEventListener('click', onMouseClick);
 
