@@ -28,11 +28,9 @@ function resizeImage(img){
 
 function loadCanvas(dataURL) {
   imageCanvas.onload = function() {
-   // resizeImage(this);
     canvas.width = this.width;
     canvas.height = this.height;
     context.drawImage(this,0,0,this.width,this.height);
-    //console.log(context)
   };
   imageCanvas.src = dataURL;
 }
@@ -40,10 +38,6 @@ function loadCanvas(dataURL) {
 function loadPlanisphere(dataURL) {
     imageCanvas2.onload = function() {
     resizeImage(this);
-   // canvas.width = this.width;
-    //canvas.height = this.height;
-    //context.drawImage(this,0,0,this.width,this.height);
-    //console.log(context)
   };
   imageCanvas2.src = dataURL;
 }
@@ -77,26 +71,10 @@ function getPositionOnCanvas(objectTexture, positionOnObject){
 }
 
 function getPixelFromTexture(objectTexture, positionOnObject) {
-    // var 
-    // var pixelFromCanvas = []
-    
-    // for(var i = 0; i < objectTexture.image.width; i++) {
-
-    //     var pixelFromCanvas[i] = []
-    //     for(var y = 0; y < objectTexture.image.height; y++) {
-    //         pixelFromCanvas[i][y]
-    //     }
-    // }
-
-    //console.log(objectTexture)
-    //console.log(positionOnObject)
     var image = new THREE.Vector2()
 
     image.x = Math.round(positionOnObject.x * objectTexture.image.width)
-    image.y = Math.round(positionOnObject.y * objectTexture.image.height)
-
-    //console.log(image)
-    //console.log('tsé')
+    image.y = Math.round((1 - positionOnObject.y) * objectTexture.image.height)
 
     var imageData = context.getImageData(image.x, image.y, 1, 1);
 
@@ -107,18 +85,7 @@ function getPixelFromTexture(objectTexture, positionOnObject) {
     var b = pixel[2]
     var a = pixel[3]
 
-    console.log(pixel)
-
     return pixel
-}
-
-function getPixelColor(imagedata, x, y ) {
-    var position = ( x * imagedata.height * y ) * 4
-    var data = imagedata.data
-
-    //console.log(imagedata)
-
-    return { r: data[ position ], g: data[ position + 1 ], b: data[ position + 2 ] }
 }
 
 function onMouseClick(event) {
@@ -131,19 +98,11 @@ function onMouseClick(event) {
     if(selectioned) {
         var positionOnObject = getPositionOnObject(selectioned);
         
-        var positionOnCanvas = getPositionOnCanvas(earth.material.map, positionOnObject);
-        //console.log(positionOnObject);
-        
-        //console.log(selectioned.point);
-        
+        var positionOnCanvas = getPositionOnCanvas(textureEarthInBloom, positionOnObject);
 
-        //var earthPixel = getPixelFromTexture(earth.material.map, positionOnObject);
         var inBloomPixel = getPixelFromTexture(textureEarthInBloom, positionOnObject);
 
-
-        DrawCircleOnPlan(positionOnCanvas); 
-
-        console.log(inBloomPixel);
+        DrawCircleOnPlan(positionOnCanvas);
 
         PlayMusic(inBloomPixel);
 
@@ -163,16 +122,13 @@ function DrawCircleOnPlan(positionOnCanvas){
 }
 
 function PlayMusic(PixelColor){
-
     var audio =  document.getElementById('audio');
 
-    var r = PixcelColor[0];
-    var g = PixcelColor[1];
-    var b = PixcelColor[2];
+    var r = PixelColor[0];
+    var g = PixelColor[1];
+    var b = PixelColor[2];
 
-
-
-
+    console.log(PixelColor);
 
     if(r=='0' && g=='255' && b=='235'){ //Red
 
@@ -195,9 +151,6 @@ function PlayMusic(PixelColor){
     if(r=='' && g=='' && b==''){
         
     }
-
-    console.log(PixelColor);
-
 
    // audio.src = '';
     audio.play();
