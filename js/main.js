@@ -22,7 +22,6 @@ var moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32),
             new THREE.MeshPhongMaterial({color: 0xffffff}));
 var earth = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff}));
-            earth.name = "earth"
 var cloud = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff, transparent: true}));
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8>
+    <title>Earth & moon</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #canvas {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 100;
+            background-color: #720039;
+        }
+        #audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <audio id="audio" controls="false" preload="" src="./audio/file.mp3" autoplay="true"></audio>
+    <canvas id="canvas">
+
+    </canvas>
+    <div id="renderer">
+
+    </div>
+    <script>
+        contextAudio = new webkitAudioContext();
+        source = contextAudio.createMediaElementSource(document.getElementsByTagName('audio')[0]);
+
+        //Now we want to create a filter
+        filter = contextAudio.createBiquadFilter();
+        source.connect(filter); //and of course connect it
+        filter.connect(contextAudio.destination);//now we want to connect that to the output
+        filter.type = 3; //this is a lowshelffilter (try excuting filter1.LOWSHELF in your console)
+        filter.gain.value = 30;
+
+        filter.frequency.setValueAtTime(0.0, contextAudio.currentTime);
+        filter.frequency.linearRampToValueAtTime(120.0, contextAudio.currentTime+10);
+    </script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+    <script src="./js/function.js"> </script>
+    <script src="./js/main.js"> </script>
+</body>
+</html>
