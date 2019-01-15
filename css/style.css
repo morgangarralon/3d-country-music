@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+#canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    border:1px solid white;
+    background-color: #720039;
+}
+
+#canvas2{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -100;
+    border:1px solid white;
+    background-color: #720039;
+}
+audio{
+  z-index:-1000;
+  position:absolute;
+}
+.circle-on-plan {
+    color: red;
+    position:fixed;
+    z-index:1000;
+}

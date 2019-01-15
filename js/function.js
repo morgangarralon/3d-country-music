@@ -21,25 +21,46 @@ function resizeImage(img){
     canvasCopy.height = img.height
     copyContext.drawImage(img, 0, 0)
   
-    canvas2.width = img.width * canvasImageRatio
-    canvas2.height = img.height * canvasImageRatio
-    context2.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas2.width, canvas2.height)
-  }
+    canvas.width = img.width * canvasImageRatio
+    canvas.height = img.height * canvasImageRatio
+    context.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height)
+}
 
-function loadCanvas(dataURL) {
+function loadPlanisphere(dataURL) {
   imageCanvas.onload = function() {
-    canvas.width = this.width;
-    canvas.height = this.height;
-    context.drawImage(this,0,0,this.width,this.height);
+    resizeImage(this);
+
+    differentColors = extractDifferentColors();
+    console.log(differentColors);
   };
   imageCanvas.src = dataURL;
 }
 
-function loadPlanisphere(dataURL) {
-    imageCanvas2.onload = function() {
-    resizeImage(this);
-  };
-  imageCanvas2.src = dataURL;
+function extractDifferentColors() {
+    pixels = [];
+
+    for(i = 0; i < canvas.width; i++) {
+        for(j = 0; j < canvas.height; j++) {
+            pixel = context.getImageData(i, j, 1, 1).data;
+            if(typeof pixels[pixel[0]] == "undefined"
+               && (pixel[0] === 0 || pixel[0] === 255)) {
+                pixels[pixel[0]] = [];
+            }
+            if(typeof pixels[pixel[0]] != "undefined"
+               && typeof pixels[pixel[0]][pixel[1]] == "undefined"
+               && (pixel[1] === 0 || pixel[1] === 255)) {
+                pixels[pixel[0]][pixel[1]] = [];
+            }
+            if(typeof pixels[pixel[0]] != "undefined"
+               && typeof pixels[pixel[0]][pixel[1]] != "undefined"
+               && typeof pixels[pixel[0]][pixel[1]] != "undefined"            
+               && (pixel[2] === 0 || pixel[2] === 255) && pixel[2] != "undefined") {
+                pixels[pixel[0]][pixel[1]][pixel[2]] = './audio/file.mp3';
+            }
+        }
+    }
+
+    return pixels;
 }
 
 function getPositionOnObject(selectioned) {
@@ -51,7 +72,7 @@ function getPositionOnObject(selectioned) {
     return vector;
 }
 
-function getSelectionneLePlusProche(position) {
+function getSelectPointOnEarth(position) {
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(position, camera);
     var selectionnes = raycaster.intersectObjects(selectionables.children);
@@ -73,8 +94,8 @@ function getPositionOnCanvas(objectTexture, positionOnObject){
 function getPixelFromTexture(objectTexture, positionOnObject) {
     var image = new THREE.Vector2()
 
-    image.x = Math.round(positionOnObject.x * objectTexture.image.width)
-    image.y = Math.round((1 - positionOnObject.y) * objectTexture.image.height)
+    image.x = Math.round(positionOnObject.x * canvas.width)
+    image.y = Math.round((1 - positionOnObject.y) * canvas.height)
 
     var imageData = context.getImageData(image.x, image.y, 1, 1);
 
@@ -94,7 +115,7 @@ function onMouseClick(event) {
     position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
     position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
 
-    var selectioned = getSelectionneLePlusProche(position);
+    var selectioned = getSelectPointOnEarth(position);
     if(selectioned) {
         var positionOnObject = getPositionOnObject(selectioned);
         
@@ -102,9 +123,11 @@ function onMouseClick(event) {
 
         var inBloomPixel = getPixelFromTexture(textureEarthInBloom, positionOnObject);
 
-        DrawCircleOnPlan(positionOnCanvas);
+        DrawCircle(textureEarthInBloom, positionOnCanvas);
 
         PlayMusic(inBloomPixel);
+
+        DrawSphere(selectioned);
 
         /* alert("Vous avez sélectionné l'objet " + object.name); */
     } else {
@@ -112,56 +135,63 @@ function onMouseClick(event) {
     };
 }
 
-function DrawCircleOnPlan(positionOnCanvas){
-            var div = document.createElement("div");
-            div.innerText = 'o';
-            var positionx = positionOnCanvas.x /4000 * 202;
-            var positiony = 101 - positionOnCanvas.y /2000 * 101;
-            div.setAttribute('style','color:red;radius:0.5;position:fixed;z-index:1000;left:'+positionx+'px;top:'+positiony+'px');
-            document.body.appendChild(div);
+function DrawSphere(selectioned){
+    var point3d = new THREE.Mesh(geometryEarth,
+                  new THREE.MeshPhongMaterial({color: 0xbb00aa, position: selectioned.point}));
+    
+    point3d.scale.set(.05, .05, .05);
+    point3d.position.set(selectioned.point.x, selectioned.point.y, selectioned.point.z)
+    groupEarth.add(point3d);
+    
+    for (var i = 1; i < groupEarth.children.length; i++) {
+        groupEarth.remove(groupEarth.children[i]);
+    }
+    console.log(point3d);
 }
 
-function PlayMusic(PixelColor){
+function DrawCircle(objectTexture, positionOnCanvas){
+    var div = document.createElement("div");
+
+    div.innerText = 'o';
+    div.setAttribute('class', 'circle-on-plan')
+    var positionx = positionOnCanvas.x / objectTexture.image.width * canvas.width;
+    var positiony = canvas.height - positionOnCanvas.y / objectTexture.image.height * canvas.height;
+    div.setAttribute('style','left:' + positionx + 'px; top:' + positiony + 'px');
+    
+    document.body.appendChild(div);
+}
+
+function PlayMusic(pixel){
     var audio =  document.getElementById('audio');
 
-    var r = PixelColor[0];
-    var g = PixelColor[1];
-    var b = PixelColor[2];
+    var r = pixel[0];
+    var g = pixel[1];
+    var b = pixel[2];
 
-    console.log(PixelColor);
+    console.log(pixel);
 
-    if(r=='0' && g=='255' && b=='235'){ //Red
+    if(r=='0' && g=='255' && b=='235') {
 
     }
-    if(r=='234' && g=='252' && b=='0'){ //Yellow
+    if(r=='234' && g=='252' && b=='0') {
         
     }
-    if(r=='' && g=='' && b==''){
+    if(r=='' && g=='' && b=='') {
         
     }
-    if(r=='' && g=='' && b==''){
+    if(r=='' && g=='' && b=='') {
         
     }
-    if(r=='' && g=='' && b==''){
+    if(r=='' && g=='' && b=='') {
         
     }
-    if(r=='' && g=='' && b==''){
+    if(r=='' && g=='' && b=='') {
         
     }
-    if(r=='' && g=='' && b==''){
+    if(r=='' && g=='' && b=='') {
         
     }
 
    // audio.src = '';
     audio.play();
-    
 }
-
-
-function DrawCircleOnTerre(positionOnCanvas){
-            var div = document.createElement("div");
-            div.innerText = 'o';
-            div.setAttribute('style','color:red;radius:0.5;position:fixed;z-index:1000;left:'+positionOnCanvas.x/600+'px;top:'+positionOnCanvas.y/200+'px');
-            document.body.appendChild(div);
-}
-

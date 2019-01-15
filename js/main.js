@@ -9,18 +9,10 @@ var canvasImageRatio = 0.05
 var settings = {
     max_width: 600,
     max_height: 200
-  }
-
-var imageCanvas2 = new Image();
-var canvas2 = document.getElementById('canvas2');
-var context2 = canvas2.getContext('2d');
-var canvasImageRatio2 = 0.05
-var settings2 = {
-        max_width: 600,
-        max_height: 200
-    }
+}
 
 var speedEarth = .00;
+var radiusEarth = 1.5;
 var speedMoon = speedEarth/27;
 var speedCloud = speedEarth/0.7;
 var scene = new THREE.Scene();
@@ -33,7 +25,7 @@ var textureLoaderEarth = new THREE.TextureLoader();
 var textureLoaderCloud = new THREE.TextureLoader();
 var ambientLight = new THREE.AmbientLight(0xffffff, .1);
 var pointLight = new THREE.DirectionalLight(0xffffff, .3);
-var geometryEarth = new THREE.SphereGeometry(1.5, 32, 32);
+var geometryEarth = new THREE.SphereGeometry(radiusEarth, 32, 32);
 var directionalLight = new THREE.DirectionalLight(0xffdddd, .7);
 var moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32),
             new THREE.MeshPhongMaterial({color: 0xffffff}));
@@ -94,8 +86,7 @@ moon.lookAt(earth.position);
 
 renderer.domElement.addEventListener('click', onMouseClick);
 
-loadCanvas('img/earth_colorv2.jpg');
-loadPlanisphere('img/earth_colorv2.jpg');
+loadPlanisphere('img/earth_map.png');
 
 function animate() {
     earth.rotateY(speedEarth);
