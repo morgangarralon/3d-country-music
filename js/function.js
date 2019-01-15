@@ -8,11 +8,28 @@ function getPositionOnScreen(camera, object3d) {
     return vector
 }
 
+function resizeImage(img){
+    var canvasCopy = document.createElement("canvas")
+    var copyContext = canvasCopy.getContext("2d")
+    
+    if(img.width > settings.max_width)
+        ratio = settings.max_width / img.width
+    else if(img.height > settings.max_height)
+        ratio = settings.max_height / img.height
+  
+    canvasCopy.width = img.width
+    canvasCopy.height = img.height
+    copyContext.drawImage(img, 0, 0)
+  
+    canvas.width = img.width * canvasImageRatio
+    canvas.height = img.height * canvasImageRatio
+    context.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height)
+  }
+
 function loadCanvas(dataURL) {
   imageCanvas.onload = function() {
-    canvas.width = this.width
-    canvas.height = this.height
-    context.drawImage(this, 0, 0, this.width, this.height);
+    resizeImage(this);
+
     console.log(context)
   };
   imageCanvas.src = dataURL;

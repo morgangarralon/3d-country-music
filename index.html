@@ -8,16 +8,22 @@
             margin: 0;
             overflow: hidden;
         }
-        #moon_panel {
+        #canvas {
             position: absolute;
-            z-index: 10;
-            max-width: 20em;
+            top: 0px;
+            left: 0px;
+            z-index: 100;
             background-color: #720039;
-            padding: 10px;
         }
     </style>
 </head>
 <body>
+    <canvas id="canvas">
+
+    </canvas>
+    <div id="renderer">
+
+    </div>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
     <script src="./js/function.js"> </script>

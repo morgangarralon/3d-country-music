@@ -1,8 +1,17 @@
 var textureLoaderEarthInBloom = new THREE.TextureLoader();
 var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_color.jpg');
 var imageCanvas = new Image();
-var canvas = document.createElement('canvas');
+var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
+var canvasImageRatio = 0.05
+var settings = {
+    max_width: 600,
+    max_height: 200
+  }
+// document.body.appendChild(canvas);
+
+
+
 var speedEarth = .001;
 var speedMoon = speedEarth/27;
 var speedCloud = speedEarth/0.7;
@@ -29,7 +38,7 @@ var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHei
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+document.getElementById('renderer').appendChild(renderer.domElement);
 cloud.scale.setScalar(1.03);
 controls.maxDistance = 30;
 groupEarth.add(groupMoon);
