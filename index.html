@@ -12,41 +12,40 @@
             position: absolute;
             top: 0px;
             left: 0px;
-            z-index: 100;
+            z-index: -100;
+            border:1px solid white;
             background-color: #720039;
         }
-        #audio {
-            display: none;
+        
+        #canvas2{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 100;
+            border:1px solid white;
+            background-color: #720039;
         }
     </style>
 </head>
-
-<script>
-    contextAudio = new AudioContext();
-    source = contextAudio.createMediaElementSource(document.getElementsByTagName('audio')[0]);
-
-    //Now we want to create a filter
-    filter = contextAudio.createBiquadFilter();
-    source.connect(filter); //and of course connect it
-    filter.connect(contextAudio.destination);//now we want to connect that to the output
-    filter.type = 3; //this is a lowshelffilter (try excuting filter1.LOWSHELF in your console)
-    filter.gain.value = 30;
-
-    filter.frequency.setValueAtTime(0.0, contextAudio.currentTime);
-    filter.frequency.linearRampToValueAtTime(120.0, contextAudio.currentTime+10);
-</script>
 <body>
-        <div id="renderer">
-        
-        </div>
-        <audio id="audio" controls="false" preload="" src="./audio/file.mp3" autoplay="true"></audio>
+    
+
+    <div id="renderer">
+
+    </div>
+    <canvas id="canvas">
+
+    </canvas>
+    <canvas id="canvas2">
+
+    </canvas>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+
+
     <script src="./js/function.js"> </script>
     <script src="./js/main.js"> </script>
 
-    <canvas id="canvas">
-    
-    </canvas>
+
 </body>
 </html>

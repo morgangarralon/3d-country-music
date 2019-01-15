@@ -1,6 +1,9 @@
 var textureLoaderEarthInBloom = new THREE.TextureLoader();
-var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_color.jpg');
+var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_colorv2.jpg');
+
+
 var imageCanvas = new Image();
+
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var canvasImageRatio = 0.05
@@ -8,6 +11,17 @@ var settings = {
     max_width: 600,
     max_height: 200
   }
+
+
+var imageCanvas2 = new Image();
+var canvas2 = document.getElementById('canvas2');
+var context2 = canvas2.getContext('2d');
+var canvasImageRatio2 = 0.05
+var settings2 = {
+    max_width: 600,
+    max_height: 200
+  }
+
 // document.body.appendChild(canvas);
 
 
@@ -31,6 +45,7 @@ var moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32),
             new THREE.MeshPhongMaterial({color: 0xffffff}));
 var earth = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff}));
+            earth.name = "earth"
 var cloud = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff, transparent: true}));
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
@@ -85,7 +100,10 @@ camera.position.z = 8;
 moon.lookAt(earth.position);
 
 renderer.domElement.addEventListener('click', onMouseClick);
-loadCanvas('img/earth_color.jpg')
+
+loadCanvas('img/earth_color.jpg');
+loadPlanisphere('img/earth_color.jpg');
+
 
 function animate() {
     earth.rotateY(speedEarth);
