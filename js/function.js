@@ -31,7 +31,6 @@ function loadPlanisphere(dataURL) {
     resizeImage(this);
 
     differentColors = extractDifferentColors();
-    console.log(differentColors);
   };
   imageCanvas.src = dataURL;
 }
@@ -141,12 +140,10 @@ function DrawSphere(selectioned){
     
     point3d.scale.set(.05, .05, .05);
     point3d.position.set(selectioned.point.x, selectioned.point.y, selectioned.point.z)
-    groupEarth.add(point3d);
-    
-    for (var i = 1; i < groupEarth.children.length; i++) {
+    for(var i = 2; i < groupEarth.children.length; i++) {
         groupEarth.remove(groupEarth.children[i]);
     }
-    console.log(point3d);
+    groupEarth.add(point3d);
 }
 
 function DrawCircle(objectTexture, positionOnCanvas){

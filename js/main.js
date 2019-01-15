@@ -11,10 +11,10 @@ var settings = {
     max_height: 200
 }
 
-var speedEarth = .00;
+var speedEarth = .000;
 var radiusEarth = 1.5;
-var speedMoon = speedEarth/27;
-var speedCloud = speedEarth/0.7;
+var speedMoon = .0003/*speedEarth/27*/;
+var speedCloud = .001/*speedEarth/0.7*/;
 var scene = new THREE.Scene();
 var groupMoon = new THREE.Group();
 var groupEarth = new THREE.Group();
@@ -89,7 +89,13 @@ renderer.domElement.addEventListener('click', onMouseClick);
 loadPlanisphere('img/earth_map.png');
 
 function animate() {
-    earth.rotateY(speedEarth);
+    if(typeof groupEarth.children[3] != "undefined") {
+        console.log(groupEarth.children);
+        console.log(groupEarth.children[2]);
+        groupEarth.children[3].rotateY(speedEarth);
+    }
+    // earth.rotateY(speedEarth);
+    // groupEarth.rotateY(speedEarth);
     cloud.rotateY(speedCloud);
     moon.rotateY(speedMoon);
     moon.position.set(0, 0, 0);
