@@ -20,10 +20,6 @@
         }
     </style>
 </head>
-<div id="renderer">
-
-</div>
-<audio id="audio" controls="false" preload="" src="./audio/file.mp3" autoplay="true"></audio>
 
 <script>
     contextAudio = new AudioContext();
@@ -40,12 +36,10 @@
     filter.frequency.linearRampToValueAtTime(120.0, contextAudio.currentTime+10);
 </script>
 <body>
-    <canvas id="canvas">
-
-    </canvas>
-    <div id="renderer">
-
-    </div>
+        <div id="renderer">
+        
+        </div>
+        <audio id="audio" controls="false" preload="" src="./audio/file.mp3" autoplay="true"></audio>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
     <script src="./js/function.js"> </script>
