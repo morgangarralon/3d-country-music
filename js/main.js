@@ -26,7 +26,7 @@ var settings2 = {
 
 
 
-var speedEarth = .001;
+var speedEarth = .00;
 var speedMoon = speedEarth/27;
 var speedCloud = speedEarth/0.7;
 var scene = new THREE.Scene();
