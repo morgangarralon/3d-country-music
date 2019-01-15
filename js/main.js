@@ -1,6 +1,8 @@
 var textureLoaderEarthInBloom = new THREE.TextureLoader();
 var textureEarthInBloom = textureLoaderEarthInBloom.load('img/earth_color.jpg');
-
+var imageCanvas = new Image();
+var canvas = document.createElement('canvas');
+var context = canvas.getContext('2d');
 var speedEarth = .001;
 var speedMoon = speedEarth/27;
 var speedCloud = speedEarth/0.7;
@@ -72,10 +74,10 @@ scene.add(directionalLight);
 pointLight.position.set(-2,1,1);
 scene.add(pointLight);
 camera.position.z = 8;
-
 moon.lookAt(earth.position);
 
 renderer.domElement.addEventListener('click', onMouseClick);
+loadCanvas('img/earth_color.jpg')
 
 function animate() {
     earth.rotateY(speedEarth);
