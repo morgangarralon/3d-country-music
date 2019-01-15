@@ -102,7 +102,7 @@ moon.lookAt(earth.position);
 renderer.domElement.addEventListener('click', onMouseClick);
 
 loadCanvas('img/earth_colorv2.jpg');
-loadPlanisphere('img/earth_colorv2.jpg');
+loadPlanisphere('img/earth_color.jpg');
 
 
 function animate() {

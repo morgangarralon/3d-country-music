@@ -25,10 +25,19 @@
             border:1px solid white;
             background-color: #720039;
         }
+        audio{
+        	z-index:-1000;
+        	position:absolute;
+        }
     </style>
 </head>
 <body>
     
+	<audio id='audio'
+        controls
+        src="/audio/file.mp3" type="audio/mpeg" autoplay="true">
+    </audio>
+
 
     <div id="renderer">
 

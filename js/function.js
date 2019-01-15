@@ -134,7 +134,7 @@ function onMouseClick(event) {
         var positionOnCanvas = getPositionOnCanvas(earth.material.map, positionOnObject);
         //console.log(positionOnObject);
         
-        console.log(selectioned.point);
+        //console.log(selectioned.point);
         
 
         //var earthPixel = getPixelFromTexture(earth.material.map, positionOnObject);
@@ -142,6 +142,11 @@ function onMouseClick(event) {
 
 
         DrawCircleOnPlan(positionOnCanvas); 
+
+        console.log(inBloomPixel);
+
+        PlayMusic(inBloomPixel);
+
         /* alert("Vous avez sélectionné l'objet " + object.name); */
     } else {
         // alert("Vous n'avez rien sélectionné")
@@ -155,6 +160,48 @@ function DrawCircleOnPlan(positionOnCanvas){
             var positiony = 101 - positionOnCanvas.y /2000 * 101;
             div.setAttribute('style','color:red;radius:0.5;position:fixed;z-index:1000;left:'+positionx+'px;top:'+positiony+'px');
             document.body.appendChild(div);
+}
+
+function PlayMusic(PixelColor){
+
+    var audio =  document.getElementById('audio');
+
+    var r = PixcelColor[0];
+    var g = PixcelColor[1];
+    var b = PixcelColor[2];
+
+
+
+
+
+    if(r=='0' && g=='255' && b=='235'){ //Red
+
+    }
+    if(r=='234' && g=='252' && b=='0'){ //Yellow
+        
+    }
+    if(r=='' && g=='' && b==''){
+        
+    }
+    if(r=='' && g=='' && b==''){
+        
+    }
+    if(r=='' && g=='' && b==''){
+        
+    }
+    if(r=='' && g=='' && b==''){
+        
+    }
+    if(r=='' && g=='' && b==''){
+        
+    }
+
+    console.log(PixelColor);
+
+
+   // audio.src = '';
+    audio.play();
+    
 }
 
 
