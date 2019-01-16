@@ -10,7 +10,7 @@ function getPositionOnScreen(camera, object3d) {
 
 function resizeImage(img){
     var canvasCopy = document.createElement("canvas")
-    var copyContext = canvasCopy.getContext("2d")
+    var contextCopy = canvasCopy.getContext("2d")
     
     if(img.width > settings.max_width)
         ratio = settings.max_width / img.width
@@ -19,7 +19,7 @@ function resizeImage(img){
   
     canvasCopy.width = img.width
     canvasCopy.height = img.height
-    copyContext.drawImage(img, 0, 0)
+    contextCopy.drawImage(img, 0, 0)
   
     canvas.width = img.width * canvasImageRatio
     canvas.height = img.height * canvasImageRatio
@@ -35,11 +35,11 @@ function loadCanvas(dataURL) {
   imageCanvas.src = dataURL;
 }
 
-function getPositionOnObject(selectioned) {
+function getPositionOnObject(selected) {
     var vector = new THREE.Vector3();
 
-    selectioned.object.getWorldPosition(vector).project(camera)
-    vector = selectioned.uv
+    selected.object.getWorldPosition(vector).project(camera)
+    vector = selected.uv
   
     return vector;
 }
@@ -105,9 +105,9 @@ function onMouseClick(event) {
     position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
     position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
 
-    var selectioned = getSelectionneLePlusProche(position)
-    if(selectioned) {
-        var positionOnObject = getPositionOnObject(selectioned)
+    var selected = getSelectionneLePlusProche(position)
+    if(selected) {
+        var positionOnObject = getPositionOnObject(selected)
         var earthPixel = getPixelFromTexture(earth.material.map, positionOnObject) 
         var inBloomPixel = getPixelFromTexture(textureEarthInBloom, positionOnObject) 
         /* alert("Vous avez sélectionné l'objet " + object.name); */

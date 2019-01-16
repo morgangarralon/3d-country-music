@@ -10,7 +10,7 @@ function getPositionOnScreen(camera, object3d) {
 
 function resizeImage(img){
     var canvasCopy = document.createElement("canvas")
-    var copyContext = canvasCopy.getContext("2d")
+    var contextCopy = canvasCopy.getContext("2d")
     
     if(img.width > settings.max_width)
         ratio = settings.max_width / img.width
@@ -19,10 +19,10 @@ function resizeImage(img){
   
     canvasCopy.width = img.width
     canvasCopy.height = img.height
-    copyContext.drawImage(img, 0, 0)
+    contextCopy.drawImage(img, 0, 0)
   
-    canvas.width = img.width * canvasImageRatio
-    canvas.height = img.height * canvasImageRatio
+    canvas.width = img.width * ratio
+    canvas.height = img.height * ratio
     context.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height)
 }
 
@@ -62,22 +62,35 @@ function extractDifferentColors() {
     return pixels;
 }
 
-function getPositionOnObject(selectioned) {
+function getPositionOnObject(selected) {
     var vector = new THREE.Vector3();
 
-    selectioned.object.getWorldPosition(vector).project(camera)
-    vector = selectioned.uv
+    selected.object.getWorldPosition(vector).project(camera)
+    vector = selected.uv
   
     return vector;
 }
 
-function getSelectPointOnEarth(position) {
+function getSelected(position) {
+    var selectedIndex = -1;
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(position, camera);
-    var selectionnes = raycaster.intersectObjects(selectionables.children);
+    var selecteds = raycaster.intersectObjects(selectionables.children);
     
-    if (selectionnes.length) {
-        return selectionnes[0];
+    selecteds.forEach(function(selected, key) {
+        var selectedName = selected.object.name;
+
+        if(selectedName === "earth") {
+            selectedIndex = key;
+        } else if(selectedName === "moon") {
+            selectedIndex = key;
+        } 
+    });
+
+    if(selectedIndex !== -1) {
+        return selecteds[selectedIndex];
+    } else {
+        return null;
     }
 }
 
@@ -109,44 +122,46 @@ function getPixelFromTexture(objectTexture, positionOnObject) {
 }
 
 function onMouseClick(event) {
+    console.log(selectionables);
+
     var position = new THREE.Vector2();
     var domRect = renderer.domElement.getBoundingClientRect();
     position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
     position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
+    var selected = getSelected(position);
 
-    var selectioned = getSelectPointOnEarth(position);
-    if(selectioned) {
-        var positionOnObject = getPositionOnObject(selectioned);
-        
-        var positionOnCanvas = getPositionOnCanvas(textureEarthInBloom, positionOnObject);
-
-        var inBloomPixel = getPixelFromTexture(textureEarthInBloom, positionOnObject);
-
-        DrawCircle(textureEarthInBloom, positionOnCanvas);
-
-        PlayMusic(inBloomPixel);
-
-        DrawSphere(selectioned);
-
-        /* alert("Vous avez sélectionné l'objet " + object.name); */
-    } else {
-        // alert("Vous n'avez rien sélectionné")
-    };
+    if(selected && typeof selected.object != "undefined") {
+        var selectedName = selected.object.name;
+    
+        if(selectedName === "earth") {
+            var positionOnObject = getPositionOnObject(selected);
+            var positionOnCanvas = getPositionOnCanvas(textureEarthInBloom, positionOnObject);
+            var inBloomPixel = getPixelFromTexture(textureEarthInBloom, positionOnObject);
+    
+            drawCircle(textureEarthInBloom, positionOnCanvas);
+            playMusic(selectedName, inBloomPixel);
+            drawSphere(selected);
+        } else if(selectedName === "moon") {
+            var selected = getSelected(position);
+    
+            playMusic(selectedName)
+        };
+    }
 }
 
-function DrawSphere(selectioned){
+function drawSphere(selected){
     var point3d = new THREE.Mesh(geometryEarth,
-                  new THREE.MeshPhongMaterial({color: 0xbb00aa, position: selectioned.point}));
+                  new THREE.MeshPhongMaterial({color: 0x341d2f}));
     
     point3d.scale.set(.05, .05, .05);
-    point3d.position.set(selectioned.point.x, selectioned.point.y, selectioned.point.z)
+    point3d.position.set(selected.point.x, selected.point.y, selected.point.z)
     for(var i = 2; i < groupEarth.children.length; i++) {
         groupEarth.remove(groupEarth.children[i]);
     }
     groupEarth.add(point3d);
 }
 
-function DrawCircle(objectTexture, positionOnCanvas){
+function drawCircle(objectTexture, positionOnCanvas){
     var div = document.createElement("div");
 
     div.innerText = 'o';
@@ -158,37 +173,33 @@ function DrawCircle(objectTexture, positionOnCanvas){
     document.body.appendChild(div);
 }
 
-function PlayMusic(pixel){
+function onResize(event) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function playMusic(selectedName, pixel = null){
     var audio =  document.getElementById('audio');
+    audio.src = "./audio/file.mp3";
 
-    var r = pixel[0];
-    var g = pixel[1];
-    var b = pixel[2];
-
-    console.log(pixel);
-
-    if(r=='0' && g=='255' && b=='235') {
-
-    }
-    if(r=='234' && g=='252' && b=='0') {
-        
-    }
-    if(r=='' && g=='' && b=='') {
-        
-    }
-    if(r=='' && g=='' && b=='') {
-        
-    }
-    if(r=='' && g=='' && b=='') {
-        
-    }
-    if(r=='' && g=='' && b=='') {
-        
-    }
-    if(r=='' && g=='' && b=='') {
-        
+    if(selectedName === "moon") {
+        audio.src = './audio/moon.mp3';
+    } else if(selectedName === "earth" && pixel.length === 4) {
+        var r = pixel[0];
+        var g = pixel[1];
+        var b = pixel[2];
+        var a = pixel[3];
+    
+        console.log(pixel);
+    
+        if(!a) { //ocean
+            audio.src = './audio/none.mp3';
+        }
     }
 
-   // audio.src = '';
-    audio.play();
+    if(audio.src !== "./audio/file.mp3") {
+        audio.play();
+    }
 }

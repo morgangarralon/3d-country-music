@@ -6,9 +6,9 @@ var imageCanvas = new Image();
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var canvasImageRatio = 0.05
-var settings = {
-    max_width: 600,
-    max_height: 200
+const settings = {
+    max_width: 400,
+    max_height: 230
 }
 
 var speedEarth = .000;
@@ -29,8 +29,10 @@ var geometryEarth = new THREE.SphereGeometry(radiusEarth, 32, 32);
 var directionalLight = new THREE.DirectionalLight(0xffdddd, .7);
 var moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32),
             new THREE.MeshPhongMaterial({color: 0xffffff}));
+    moon.name = "moon";
 var earth = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff}));
+    earth.name = "earth";
 var cloud = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff, transparent: true}));
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
@@ -40,12 +42,13 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('renderer').appendChild(renderer.domElement);
 cloud.scale.setScalar(1.03);
 controls.maxDistance = 30;
+groupMoon.add(moon);
 groupEarth.add(groupMoon);
 controls.minDistance = 2;
 groupEarth.add(earth);
 groupEarth.add(cloud);
 selectionables.add(earth);
-groupMoon.add(moon);
+selectionables.add(moon);
 
 scene.add(groupEarth);
 scene.add(selectionables);
@@ -84,6 +87,7 @@ scene.add(pointLight);
 camera.position.z = 8;
 moon.lookAt(earth.position);
 
+window.addEventListener('resize', onResize);
 renderer.domElement.addEventListener('click', onMouseClick);
 
 loadPlanisphere('img/earth_map.png');

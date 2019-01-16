@@ -4,20 +4,11 @@ body {
 }
 #canvas {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 10px;
+    left: 10px;
     z-index: 100;
-    border:1px solid white;
-    background-color: #720039;
-}
-
-#canvas2{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: -100;
-    border:1px solid white;
-    background-color: #720039;
+    border:1px solid #ffffff;
+    background-color: rgba(160, 0, 120, .15);
 }
 audio{
   z-index:-1000;
