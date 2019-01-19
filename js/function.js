@@ -122,13 +122,13 @@ function getPixelFromTexture(objectTexture, positionOnObject) {
 }
 
 function onMouseClick(event) {
-    console.log(selectionables);
-
     var position = new THREE.Vector2();
     var domRect = renderer.domElement.getBoundingClientRect();
     position.x = (event.clientX / domRect.width) * 2 - 1 + domRect.left;
     position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
     var selected = getSelected(position);
+
+    console.log(selected);
 
     if(selected && typeof selected.object != "undefined") {
         var selectedName = selected.object.name;
@@ -144,21 +144,26 @@ function onMouseClick(event) {
         } else if(selectedName === "moon") {
             var selected = getSelected(position);
     
-            playMusic(selectedName)
+            playMusic(selectedName);
         };
+    } else {
+        playMusic();
     }
 }
 
 function drawSphere(selected){
-    var point3d = new THREE.Mesh(geometryEarth,
-                  new THREE.MeshPhongMaterial({color: 0x341d2f}));
+    var sphere = new THREE.Mesh(geometryEarth,
+                  new THREE.MeshPhongMaterial({color: 0x341d2f, transparent: true}));
     
-    point3d.scale.set(.05, .05, .05);
-    point3d.position.set(selected.point.x, selected.point.y, selected.point.z)
+    sphere.scale.set(.04, .04, .04);
+    sphere.position.set(selected.point.x, selected.point.y, selected.point.z)
     for(var i = 2; i < groupEarth.children.length; i++) {
         groupEarth.remove(groupEarth.children[i]);
     }
-    groupEarth.add(point3d);
+
+    console.log(sphere);
+
+    groupEarth.add(sphere);
 }
 
 function drawCircle(objectTexture, positionOnCanvas){
@@ -180,7 +185,7 @@ function onResize(event) {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function playMusic(selectedName, pixel = null){
+function playMusic(selectedName = null, pixel = null){
     var audio =  document.getElementById('audio');
     audio.src = "./audio/file.mp3";
 
@@ -195,8 +200,14 @@ function playMusic(selectedName, pixel = null){
         console.log(pixel);
     
         if(!a) { //ocean
-            audio.src = './audio/none.mp3';
+            audio.src = './audio/ocean.mp3';
+        } else if(g === 255) {
+            audio.src = './audio/africa.mp3';
+        } else if(r === 0 && g === 0 && b === 0) {
+            audio.src = './audio/south_america.mp3';
         }
+    } else { //milky way
+        audio.src = './audio/milky_way.mp3'
     }
 
     if(audio.src !== "./audio/file.mp3") {

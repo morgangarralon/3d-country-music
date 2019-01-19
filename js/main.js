@@ -11,8 +11,10 @@ const settings = {
     max_height: 230
 }
 
-var speedEarth = .000;
+var sphere = null;
+var speedEarth = .001;
 var radiusEarth = 1.5;
+var isOpacityUp = true;
 var speedMoon = .0003/*speedEarth/27*/;
 var speedCloud = .001/*speedEarth/0.7*/;
 var scene = new THREE.Scene();
@@ -37,6 +39,25 @@ var cloud = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff, transparent: true}));
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+// var objectLoad = new THREE.OBJLoader();
+// objectLoad.load(
+// 	'model/africa.obj',
+// 	function (object) {
+//         var groupPoint = new THREE.Group();
+//         object.scale.setScalar(.002);
+//         object.translateX(1.3);
+//         object.rotateZ(180.5);
+//         groupPoint.add(object);
+// 		scene.add(groupPoint);
+// 	},
+// 	function (xhr) {
+// 		console.log( (xhr.loaded/xhr.total * 100) + '% loaded');
+// 	},
+// 	function (error) {
+// 		console.log('An error happened');
+// 	}
+// );
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('renderer').appendChild(renderer.domElement);
@@ -93,10 +114,20 @@ renderer.domElement.addEventListener('click', onMouseClick);
 loadPlanisphere('img/earth_map.png');
 
 function animate() {
-    if(typeof groupEarth.children[3] != "undefined") {
-        console.log(groupEarth.children);
-        console.log(groupEarth.children[2]);
-        groupEarth.children[3].rotateY(speedEarth);
+    if(typeof groupEarth.children[2] != "undefined") {
+        sphere = groupEarth.children[2];
+
+        if(sphere.material.opacity <= 1 && isOpacityUp) {
+            sphere.material.opacity = sphere.material.opacity + .2;
+        } else {
+            sphere.material.opacity = sphere.material.opacity - .06;
+            isOpacityUp = false;
+
+            if(sphere.material.opacity <= .2) {
+                isOpacityUp = true;
+            }
+            
+        } 
     }
     // earth.rotateY(speedEarth);
     // groupEarth.rotateY(speedEarth);
