@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset=utf-8>
-    <title>Asonic trip through a 3d Earth</title>
+    <title>A sonic trip through a 3d Earth</title>
     <link rel="stylesheet" type="text/css" href="./css/style.css"/>
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
@@ -11,6 +11,15 @@
     <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+
+    <div class="onoffswitch" id="onoffswitch">
+        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+        <label class="onoffswitch-label" for="myonoffswitch">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+        </label>
+    </div>
+
     
 	<audio id="audio"
         controls="true"
@@ -24,8 +33,8 @@
     <canvas id="canvas">
 
     </canvas>
-    
     <script src="./js/function.js"> </script>
+    
     <script src="./js/main.js"> </script>
 </body>
 </html>

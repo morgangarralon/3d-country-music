@@ -198,7 +198,6 @@ function playMusic(selectedName = null, pixel = null){
         var a = pixel[3];
     
         console.log(pixel);
-    europe.mp3
         if(!a) { //ocean
             audio.src = './audio/ocean.mp3';
         } else if(g === 255 && r === 0 && b === 0) {
@@ -220,3 +219,21 @@ function playMusic(selectedName = null, pixel = null){
         audio.play();
     }
 }
+
+
+
+
+function onOffCanvas() {
+  //document.getElementById("myonoffswitch").innerHTML += "Clicked!<br>";
+  var onOffSwitch = document.getElementById("onoffswitch");
+
+  console.log(onOffSwitch);
+  console.log("toto");
+  if(onOffSwitch.checked){
+    canvas.style.zIndex="999"
+  }
+  else{
+    canvas.style.zIndex="-999"
+  }
+}
+
