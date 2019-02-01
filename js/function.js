@@ -201,10 +201,14 @@ function playMusic(selectedName = null, pixel = null){
     
         if(!a) { //ocean
             audio.src = './audio/ocean.mp3';
-        } else if(g === 255) {
+        } else if(g === 255 && r === 0 && b === 0) {
             audio.src = './audio/africa.mp3';
+        } else if(r === 255 && g === 0 && b === 0) {
+            audio.src = './audio/north_america.mp3';
         } else if(r === 0 && g === 0 && b === 0) {
             audio.src = './audio/south_america.mp3';
+        } else if(r === 255 && g === 255 && b === 255) {
+            audio.src = './audio/asia.mp3';
         }
     } else { //milky way
         audio.src = './audio/milky_way.mp3'
