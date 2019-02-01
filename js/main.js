@@ -25,7 +25,8 @@ var renderer = new THREE.WebGLRenderer();
 var textureLoaderMoon = new THREE.TextureLoader();
 var textureLoaderEarth = new THREE.TextureLoader();
 var textureLoaderCloud = new THREE.TextureLoader();
-var ambientLight = new THREE.AmbientLight(0xffffff, .1);
+var ambientLight = new THREE.AmbientLight(0xffffff, .3);
+var onOffSwitch = document.getElementById("onoffswitch");
 var pointLight = new THREE.DirectionalLight(0xffffff, .3);
 var geometryEarth = new THREE.SphereGeometry(radiusEarth, 32, 32);
 var directionalLight = new THREE.DirectionalLight(0xffdddd, .7);
@@ -39,25 +40,6 @@ var cloud = new THREE.Mesh(geometryEarth,
             new THREE.MeshPhongMaterial({color: 0xffffff, transparent: true}));
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-// var objectLoad = new THREE.OBJLoader();
-// objectLoad.load(
-// 	'model/africa.obj',
-// 	function (object) {
-//         var groupPoint = new THREE.Group();
-//         object.scale.setScalar(.002);
-//         object.translateX(1.3);
-//         object.rotateZ(180.5);
-//         groupPoint.add(object);
-// 		scene.add(groupPoint);
-// 	},
-// 	function (xhr) {
-// 		console.log( (xhr.loaded/xhr.total * 100) + '% loaded');
-// 	},
-// 	function (error) {
-// 		console.log('An error happened');
-// 	}
-// );
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('renderer').appendChild(renderer.domElement);
@@ -109,6 +91,7 @@ camera.position.z = 8;
 moon.lookAt(earth.position);
 
 window.addEventListener('resize', onResize);
+onOffSwitch.addEventListener('click', onOffCanvas);
 renderer.domElement.addEventListener('click', onMouseClick);
 
 loadPlanisphere('img/earth_map.png');

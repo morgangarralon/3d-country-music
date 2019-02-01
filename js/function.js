@@ -128,8 +128,6 @@ function onMouseClick(event) {
     position.y = - (event.clientY / domRect.height) * 2 + 1 + domRect.top;
     var selected = getSelected(position);
 
-    console.log(selected);
-
     if(selected && typeof selected.object != "undefined") {
         var selectedName = selected.object.name;
     
@@ -160,8 +158,6 @@ function drawSphere(selected){
     for(var i = 2; i < groupEarth.children.length; i++) {
         groupEarth.remove(groupEarth.children[i]);
     }
-
-    console.log(sphere);
 
     groupEarth.add(sphere);
 }
@@ -197,7 +193,6 @@ function playMusic(selectedName = null, pixel = null){
         var b = pixel[2];
         var a = pixel[3];
     
-        console.log(pixel);
         if(!a) { //ocean
             audio.src = './audio/ocean.mp3';
         } else if(g === 255 && r === 0 && b === 0) {
@@ -220,20 +215,15 @@ function playMusic(selectedName = null, pixel = null){
     }
 }
 
-
-
-
 function onOffCanvas() {
-  //document.getElementById("myonoffswitch").innerHTML += "Clicked!<br>";
-  var onOffSwitch = document.getElementById("onoffswitch");
-
-  console.log(onOffSwitch);
+  console.log(this);
   console.log("toto");
-  if(onOffSwitch.checked){
-    canvas.style.zIndex="999"
-  }
-  else{
-    canvas.style.zIndex="-999"
+  if(onOffSwitch.classList.contains('checked')){
+    canvas.style.zIndex="101"
+    onOffSwitch.classList.remove("checked");
+  } else {
+    canvas.style.zIndex="-101";
+    onOffSwitch.classList.add("checked");
   }
 }
 
